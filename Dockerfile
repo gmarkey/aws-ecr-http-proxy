@@ -2,7 +2,7 @@ FROM openresty/openresty:1.15.8.3-2-alpine
 
 USER root
 
-RUN apk add --no-cache python py-pip \
+RUN apk add --no-cache python py-pip dumb-init \
  && pip install awscli==1.11.183 \
  && apk --purge del py-pip
 
