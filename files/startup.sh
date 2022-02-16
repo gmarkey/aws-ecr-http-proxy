@@ -48,7 +48,7 @@ sed -i "s|${AUTH%??}|${AUTH_N}|g" $DST_CONFIG
 nginx -c ${DST_CONFIG} -t
 nginx -c ${DST_CONFIG} -g 'daemon off;' &
 
-while jobs %%: do
+while jobs %%; do
   NOW=$(date +%s)
   DELTA=$(( ${NOW} - ${LAST:=0} ))
   if [[ ${DELTA} -gt ${RENEW_INTERVAL} ]]; then
