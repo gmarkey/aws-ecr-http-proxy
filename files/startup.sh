@@ -44,7 +44,7 @@ TOKEN=$(aws ecr get-login --no-include-email | awk '{print $6}')
 AUTH_N=$(echo AWS:${TOKEN}  | base64 |tr -d "[:space:]")
 sed -i "s|${AUTH%??}|${AUTH_N}|g" $DST_CONFIG
 
-nginx -t ${DST_CONFIG}
+nginx -c ${DST_CONFIG} -t
 nginx -c ${DST_CONFIG} -g 'daemon off;' &
 
 while jobs %%: do

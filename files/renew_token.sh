@@ -18,4 +18,4 @@ AUTH_N=$(echo AWS:${TOKEN}  | base64 |tr -d "[:space:]")
 
 sed -i "s|${AUTH%??}|${AUTH_N}|g" ${DST_CONFIG}
 
-nginx -s reload
+nginx -c ${DST_CONFIG} -s reload
