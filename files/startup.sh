@@ -29,6 +29,7 @@ export SRC_CONFIG=/usr/local/openresty/nginx/conf/nginx.conf
 export DST_CONFIG=${DST_CONFIG:=/tmp/nginx.conf}
 
 cp ${SRC_CONFIG} ${DST_CONFIG}
+cp $(dirname ${SRC_CONFIG})/mime.types $(dirname ${DST_CONFIG})/mime.types
 
 # Update nginx config
 sed -i -e s!UPSTREAM!"$UPSTREAM"!g $DST_CONFIG
