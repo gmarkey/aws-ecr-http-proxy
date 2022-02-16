@@ -1,10 +1,9 @@
 #!/bin/sh
 
-set -xe
+set -e
 
 # update the auth token
-CONFIG=/usr/local/openresty/nginx/conf/nginx.conf
-AUTH=$(grep  X-Forwarded-User $CONFIG | awk '{print $4}'| uniq|tr -d "\n\r")
+AUTH=$(grep  X-Forwarded-User ${DST_CONFIG} | awk '{print $4}'| uniq|tr -d "\n\r")
 
 # retry till new get new token
 while true; do
@@ -17,6 +16,6 @@ done
 
 AUTH_N=$(echo AWS:${TOKEN}  | base64 |tr -d "[:space:]")
 
-sed -i "s|${AUTH%??}|${AUTH_N}|g" $CONFIG
+sed -i "s|${AUTH%??}|${AUTH_N}|g" ${DST_CONFIG}
 
 nginx -s reload
