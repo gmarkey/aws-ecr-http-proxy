@@ -31,15 +31,15 @@ export DST_CONFIG=${DST_CONFIG:=/tmp/nginx.conf}
 cp ${SRC_CONFIG} ${DST_CONFIG}
 
 # Update nginx config
-sed -i -e s!UPSTREAM!"$UPSTREAM"!g $CONFIG
-sed -i -e s!PORT!"$PORT"!g $CONFIG
-sed -i -e s!RESOLVER!"$RESOLVER"!g $CONFIG
-sed -i -e s!CACHE_MAX_SIZE!"$CACHE_MAX_SIZE"!g $CONFIG
-sed -i -e s!CACHE_KEY!"$CACHE_KEY"!g $CONFIG
-sed -i -e s!SCHEME!"$SCHEME"!g $CONFIG
+sed -i -e s!UPSTREAM!"$UPSTREAM"!g $DST_CONFIG
+sed -i -e s!PORT!"$PORT"!g $DST_CONFIG
+sed -i -e s!RESOLVER!"$RESOLVER"!g $DST_CONFIG
+sed -i -e s!CACHE_MAX_SIZE!"$CACHE_MAX_SIZE"!g $DST_CONFIG
+sed -i -e s!CACHE_KEY!"$CACHE_KEY"!g $DST_CONFIG
+sed -i -e s!SCHEME!"$SCHEME"!g $DST_CONFIG
 
 # add the auth token in default.conf
-AUTH=$(grep  X-Forwarded-User $CONFIG | awk '{print $4}'| uniq|tr -d "\n\r")
+AUTH=$(grep  X-Forwarded-User $DST_CONFIG | awk '{print $4}'| uniq|tr -d "\n\r")
 TOKEN=$(aws ecr get-login --no-include-email | awk '{print $6}')
 AUTH_N=$(echo AWS:${TOKEN}  | base64 |tr -d "[:space:]")
 sed -i "s|${AUTH%??}|${AUTH_N}|g" $DST_CONFIG
