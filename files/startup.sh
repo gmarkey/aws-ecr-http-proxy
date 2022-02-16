@@ -22,6 +22,8 @@ if [ -z "$AWS_DEFAULT_REGION" ] ; then
   exit 1
 fi
 
+RENEW_INTERVAL=${RENEW_INTERVAL:=3600}
+
 UPSTREAM_WITHOUT_PORT=$( echo ${UPSTREAM} | sed -r "s/.*:\/\/(.*):.*/\1/g")
 
 SCHEME=http
