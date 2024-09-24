@@ -1,10 +1,8 @@
-FROM openresty/openresty:1.15.8.3-2-alpine
+FROM openresty/openresty:1.25.3.2-alpine
 
 USER root
 
-RUN apk add --no-cache python py-pip dumb-init \
- && pip install awscli==1.11.183 \
- && apk --purge del py-pip
+RUN apk add --no-cache aws-cli dumb-init
 
 COPY files/startup.sh files/renew_token.sh /
 COPY files/nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
