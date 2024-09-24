@@ -1,9 +1,9 @@
-FROM openresty/openresty:1.25.3.2-alpine
+FROM openresty/openresty:1.17.8.2-5-alpine
 
 USER root
 
 RUN apk add --no-cache python3 py3-pip dumb-init \
- && pip install --break-system-packages awscli==1.11.183 \
+ && pip install awscli==1.11.183 \
  && apk --purge del py-pip
 
 COPY files/startup.sh files/renew_token.sh /
