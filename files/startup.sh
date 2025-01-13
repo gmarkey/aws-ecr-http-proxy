@@ -24,7 +24,8 @@ fi
 
 RENEW_INTERVAL=${RENEW_INTERVAL:=3600}
 
-UPSTREAM_WITHOUT_PORT=$( echo ${UPSTREAM} | sed -r "s/.*:\/\/(.*):.*/\1/g")
+UPSTREAM_WITHOUT_PORT=$(echo ${UPSTREAM} | sed -r "s/.*:\/\/(.*):.*/\1/g")
+UPSTREAM_REGISTRY_ID=$(echo ${UPSTREAM} | awk -F '//' '{print $2}' | awk -F '.' '{print $1}')
 
 SCHEME=http
 export SRC_CONFIG=/usr/local/openresty/nginx/conf/nginx.conf
@@ -42,10 +43,9 @@ sed -i -e s!CACHE_KEY!"$CACHE_KEY"!g $DST_CONFIG
 sed -i -e s!SCHEME!"$SCHEME"!g $DST_CONFIG
 
 # add the auth token in default.conf
-AUTH=$(grep  X-Forwarded-User $DST_CONFIG | awk '{print $4}'| uniq|tr -d "\n\r")
-TOKEN=$(aws ecr get-login --no-include-email | awk '{print $6}')
-AUTH_N=$(echo AWS:${TOKEN}  | base64 |tr -d "[:space:]")
-sed -i "s|${AUTH%??}|${AUTH_N}|g" $DST_CONFIG
+AUTH=$(grep X-Forwarded-User $DST_CONFIG | awk '{print $4}'| uniq|tr -d "\n\r")
+TOKEN=$(aws ecr get-authorization-token --registry-ids $UPSTREAM_REGISTRY_ID | jq -r '.authorizationData[].authorizationToken')
+sed -i "s|${AUTH%??}|${TOKEN}|g" $DST_CONFIG
 
 nginx -c ${DST_CONFIG} -t
 nginx -c ${DST_CONFIG} -g 'daemon off;' &
