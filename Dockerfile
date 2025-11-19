@@ -1,9 +1,9 @@
-FROM openresty/openresty:1.17.8.2-5-alpine
+FROM gmarkey/openresty:1.17.8.2
 
 USER root
 
 RUN apk add --no-cache python3 py3-pip dumb-init jq \
- && pip install awscli==1.11.183 \
+ && pip install awscli \
  && apk --purge del py-pip
 
 COPY files/startup.sh files/renew_token.sh /

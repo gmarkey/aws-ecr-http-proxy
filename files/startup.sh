@@ -25,7 +25,7 @@ fi
 RENEW_INTERVAL=${RENEW_INTERVAL:=3600}
 
 UPSTREAM_WITHOUT_PORT=$(echo ${UPSTREAM} | sed -r "s/.*:\/\/(.*):.*/\1/g")
-UPSTREAM_REGISTRY_ID=$(echo ${UPSTREAM} | awk -F '//' '{print $2}' | awk -F '.' '{print $1}')
+export UPSTREAM_REGISTRY_ID=$(echo ${UPSTREAM} | awk -F '//' '{print $2}' | awk -F '.' '{print $1}')
 
 SCHEME=http
 export SRC_CONFIG=/usr/local/openresty/nginx/conf/nginx.conf
